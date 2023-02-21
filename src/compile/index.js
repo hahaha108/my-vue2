@@ -1,14 +1,48 @@
+// 创建ast语法树
+function createASTElement(tag, attrs) {
+    return {
+        tag, // 元素
+        attrs, // 属性
+        children: [], // 子节点
+        type: 1, // 类型，DOM里元素的类型是1
+        parent: null // 父元素
+    }
+}
+
+let root; // 根元素
+let createParent // 当前元素的父亲
+let stack = [] // 栈
+
 // 开始的标签
 function start(tagName, attrs) {
-    console.log(tagName, attrs, '开始标签')
+    // console.log(tagName, attrs, '开始标签')
+    let element = createASTElement(tagName,attrs)
+    if(!root){
+        root = element
+    }
+    createParent = element
+    stack.push(element)
 }
 // 文本
 function charts(text) {
-    console.log(text, '文本')
+    // console.log(text, '文本')
+    // 去掉空格
+    text = text.replace(/s/g,'')
+    if(text){
+        createParent.children.push({
+            type:3, // 文本的类型是3
+            text
+        })
+    }
 }
 // 结束的标签
 function end(tagName) {
-    console.log(tagName, '结束标签')
+    let element = stack.pop()
+    createParent = stack[stack.length - 1]
+    if(createParent){
+        element.parent = createParent.tag
+        createParent.children.push(element)
+    }
 }
 
 function parseHTML(html) {
@@ -82,12 +116,16 @@ function parseHTML(html) {
         html = html.substring(n)
         // console.log(html)
     }
+
+    return root
 }
 
+// 编译模板
 export function compileToFunction(el) {
     // console.log(el)
     // 解析ast语法树
     let ast = parseHTML(el)
+    console.log(ast)
 }
 
 // 标签名称
