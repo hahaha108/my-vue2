@@ -1,14 +1,18 @@
 import { initState } from "./initState"
 import { compileToFunction } from "./compile/index.js"
-import { mounetComponent } from "./lifecycle"
+import { mounetComponent,callHook } from "./lifecycle"
+import { mergeOptions } from "./utils/index"
 
 export function initMixin(Vue) {
     Vue.prototype._init = function (options) {
         // console.log(options)
         let vm = this
-        vm.$options = options
+        vm.$options = mergeOptions(Vue.options,options)
+
+        callHook(vm,'beforeCreate')
         // 初始化状态
         initState(vm)
+        callHook(vm,'created')
 
         // 渲染模板
         if(vm.$options.el){
