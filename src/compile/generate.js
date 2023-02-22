@@ -77,8 +77,8 @@ export function generate(el){
      *  _v()：处理文本节点
      *  _s()：处理插值运算符 {{}}
      */
-    let code = `_c(${el.tag},${el.attrs.length?`${genPorps(el.attrs)}`:'null'},${children?children:'null'})`
-    console.log(code)
+    let code = `_c("${el.tag}",${el.attrs.length?`${genPorps(el.attrs)}`:'null'},${children?children:'null'})`
+    // console.log(code)
     return code
 }
 

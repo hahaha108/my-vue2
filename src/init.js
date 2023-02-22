@@ -1,5 +1,6 @@
 import { initState } from "./initState"
 import { compileToFunction } from "./compile/index.js"
+import { mounetComponent } from "./lifecycle"
 
 export function initMixin(Vue) {
     Vue.prototype._init = function (options) {
@@ -19,6 +20,7 @@ export function initMixin(Vue) {
         // console.log(el)
         let vm = this
         el = document.querySelector(el)
+        vm.$el = el
         let options = vm.$options
         // 有没有render
         if(!options.render){
@@ -27,10 +29,14 @@ export function initMixin(Vue) {
                 // 没有template但是el
                 el = el.outerHTML
                 // console.log(el)
-                // 变成ast语法树
-                let ast = compileToFunction(el)
+                // 把模板编译成render函数
+                let render = compileToFunction(el)
+                // console.log(render)
+                options.render = render
             }
         }
+        // 挂载组件
+        mounetComponent(vm,el)
     }
 }
 
