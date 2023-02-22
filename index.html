@@ -9,19 +9,19 @@
 </head>
 
 <body>
-    <div id="app">hello{{a}} <p><span>12</span>3333</p> </div>
+    <div id="app" style="color: red;font-size: 40px" >hello{{msg}}<h2>张三</h2></div>
     <script src="dist/vue.js"></script>
     <script>
         const vm = new Vue({
             el: '#app',
             data() {
                 return {
-                    a: '123',
+                    msg: '123',
                     arr: [1, 2, 3, 4]
                 }
             }
         })
-        vm._data.arr.push([{ a: 1 }, { b: 2 }])
+        // vm._data.arr.push([{ a: 1 }, { b: 2 }])
         console.log(vm)
         // console.log(vm._data)
         // console.log(vm.arr[4])
