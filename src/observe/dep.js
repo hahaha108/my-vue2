@@ -1,11 +1,18 @@
+let id = 0 
+
 // 依赖收集类
 class Dep{
     constructor(){
+        this.id = id++
         this.subs = [] //依赖列表
     }
     // 收集watcher
     depend(){
-        this.subs.push(Dep.target)
+        // 希望watcher里面，可以存放dep（双向记忆）
+        Dep.target.addDep(this)
+    }
+    addSub(watcher){
+        this.subs.push(watcher)
     }
     // 更新watcher
     notify(){
