@@ -9,7 +9,10 @@
 </head>
 
 <body>
-    <div id="app" style="color: red;font-size: 40px" >hello{{msg}} <h1>{{arr}}</h1> <h2>张三</h2><h3>{{dict.dict1}}</h3></div>
+    <div id="app" style="color: red;font-size: 40px">hello{{msg}} <h1>{{arr}}</h1>
+        <h2>张三</h2>
+        <h3>{{dict.dict1}}</h3>
+    </div>
     <script src="dist/vue.js"></script>
     <script>
 
@@ -18,7 +21,7 @@
             data() {
                 return {
                     msg: '123',
-                    arr: [1, 2, 3, 4, {a:1,b:[1,2]}],
+                    arr: [1, 2, 3, 4, { a: 1, b: [1, 2] }],
                     dict: {
                         dict1: {
                             name: 'zzzz'
@@ -26,18 +29,26 @@
                     }
                 }
             },
-            created(){
+            created() {
                 console.log('created 3')
+                setTimeout(() => {
+                    this.msg = ' abc'
+                    for (let i = 0; i < 50000; i++) {
+                        function factorial(num) {
+                            if (num <= 1) return 1;
+                            return num * factorial(num - 1);
+                        }
+                        factorial(5000);
+                    }
+                    this.arr.splice(3)
+                    // vm._update(vm._render())
+                }, 100)
             }
         })
 
         // vm._data.arr.push([{ a: 1 }, { b: 2 }])
         console.log(vm)
-        setTimeout(()=>{
-            vm.msg = ' abc'
-            // vm.arr.splice(0,3)
-            // vm._update(vm._render())
-        },1000)
+
         // console.log(vm._data)
         // console.log(vm.arr[4])
     </script>

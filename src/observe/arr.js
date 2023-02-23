@@ -36,6 +36,7 @@ methods.forEach(item => {
             // console.log(' ob.observeArray(inserted)')
             ob.observeArray(inserted)
         }
+        ob.dep.notify()
 
         return result
     }

@@ -31,12 +31,14 @@ class Watcher{
     }
     // 初次渲染
     get(){
+        // console.log('get')
         pushTarget(this)
         this.getter()
         popTarget()
     }
     // 更新
     update(){
+        // console.log('update')
         this.getter()
     }
 }
