@@ -1,5 +1,5 @@
 import { ArrayMethods } from './arr.js'
-
+import Dep from './dep.js'
 export function observer(data) {
     // console.log(data)
     if (typeof data !== 'object' || typeof data === null) {
@@ -53,9 +53,13 @@ class Observer {
 function defineReactive(data, key, value) {
 
     observer(value) // 递归深度劫持
-
+    let dep = new Dep() // 给每个属性添加一个dep，来收集依赖
     Object.defineProperty(data, key, {
         get() {
+            // 只有在渲染阶段才收集
+            if(Dep.target){
+                dep.depend()
+            }
             // 返回值
             return value
         },
@@ -65,6 +69,7 @@ function defineReactive(data, key, value) {
             observer(newValue)
             // 替换新值
             value = newValue
+            dep.notify()
         }
     })
 }
