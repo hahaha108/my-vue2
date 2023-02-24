@@ -30,13 +30,21 @@
                 }
             },
             created() {
-                console.log('created 3')
-                setTimeout(() => {
+                console.log('created')
+                // setTimeout(() => {
                     this.msg = ' abc'
                     this.arr.splice(3)
-                    this.msg = 'bb'
+                    
+                    this.$nextTick(()=>{
+                        console.log('$nextTick')
+                        let app = document.querySelector('div')
+                        console.log(app)
+                    })
+                    setTimeout(()=>{
+                        this.msg = 'bb'
+                    },1000)
                     // vm._update(vm._render())
-                }, 100)
+                // }, 100)
             }
         })
 

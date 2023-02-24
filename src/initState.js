@@ -1,4 +1,5 @@
 import { observer } from "./observe/index.js"
+import { nextTick } from "./utils/nextTick.js"
 
 export function initState(vm) {
     let opts = vm.$options
@@ -53,4 +54,12 @@ function proxy(vm, source, key) {
             vm[source][key] = newValue
         }
     })
+}
+
+export function stateMixin(vm){
+    // 列队
+    vm.prototype.$nextTick = function(cb){
+        // console.log(cb)
+        nextTick(cb)
+    }
 }
