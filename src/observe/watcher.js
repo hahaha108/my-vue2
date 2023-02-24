@@ -29,6 +29,10 @@ class Watcher{
             dep.addSub(this)
         }
     }
+    run(){
+        // console.log('run')
+        this.getter()
+    }
     // 初次渲染
     get(){
         // console.log('get')
@@ -38,8 +42,33 @@ class Watcher{
     }
     // 更新
     update(){
+        // 不要数据更新后每次都调用getter方法
+        // 暂存
+        queueWatcher(this)
         // console.log('update')
-        this.getter()
+        // this.getter()
+    }
+}
+
+let queue = [] //队列，把需要排列更新的watcher存放到queue中
+let has = {}
+let panding = false
+function queueWatcher(watcher){
+    let id = watcher.id //每个组件都是同一个watcher
+    if(!has[id]){
+        // 如果没有执行过
+        queue.push(watcher)
+        has[id] = true
+        if(!panding){
+            setTimeout(()=>{
+                queue.forEach(watcher => {watcher.run()})
+                queue = []
+                has = {}
+                panding = false
+            },0)
+        }
+        panding = true
+       
     }
 }
 
