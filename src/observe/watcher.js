@@ -2,23 +2,35 @@ import { pushTarget, popTarget } from "./dep"
 import { nextTick } from "../utils/nextTick"
 let id = 0
 class Watcher {
-    constructor(vm, updateComponent, cb, options) {
+    constructor(vm, expOrfn, cb, options) {
         this.vm = vm
-        this.updateComponent = updateComponent
+        this.expOrfn = expOrfn
         this.cb = cb
         this.options = options
         this.deps = [] // 存放dep实例的
         this.depsId = new Set()
+        this.user = !!options.user
 
         // 给每个watcher实例不同的编号
         this.id = id++
         // 判断
-        if (typeof updateComponent === 'function') {
-            this.getter = updateComponent // 用来更新视图
+        if (typeof expOrfn === 'function') {
+            this.getter = expOrfn // 用来更新视图
+        } else {
+            this.getter = function () {
+                // c.c.c
+                let path = expOrfn.split('.')
+                let obj = vm
+                for (let i = 0; i < path.length; i++) {
+                    obj = obj[path[i]]
+                }
+                return obj
+
+            }
         }
 
         // 更新视图
-        this.get()
+        this.value = this.get() // 保存watch的初始值
     }
     addDep(dep) {
         // 1.去重
@@ -31,14 +43,20 @@ class Watcher {
     }
     run() {
         // console.log('run')
-        this.getter()
+        let value = this.get() // 新值
+        let oldValue = this.value
+        this.value = value
+        if (this.user) {
+            this.cb.call(this.vm, value, oldValue)
+        }
     }
     // 初次渲染
     get() {
         // console.log('get')
         pushTarget(this)
-        this.getter()
+        const value = this.getter()
         popTarget()
+        return value
     }
     // 更新
     update() {
@@ -55,7 +73,7 @@ let has = {}
 let panding = false
 function flushWatcher() {
     // console.log(queue)
-    queue.forEach(watcher => { watcher.run(),watcher.cb() })
+    queue.forEach(watcher => { watcher.run(); if (!watcher.user) watcher.cb() })
     queue = []
     has = {}
     panding = false

@@ -13,9 +13,9 @@ let starts = {}
 starts.data = function(parentVal,childVal){
     return childVal
 }
-starts.computed = function(){}
-starts.watch = function(){}
-starts.methods = function(){}
+// starts.computed = function(){}
+// starts.watch = function(){}
+// starts.methods = function(){}
 // 遍历生命周期
 HOOKS.forEach(hook=>{
     starts[hook] = mergeHook
