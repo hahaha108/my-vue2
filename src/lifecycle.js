@@ -10,7 +10,9 @@ export function mounetComponent(vm, el) {
     let updateComponent = () => {
         vm._update(vm._render())
     }
-    new Watcher(vm,updateComponent,()=>{},true)
+    new Watcher(vm,updateComponent,()=>{
+        callHook(vm,'updated')
+    },true)
     callHook(vm,'mounted')
 }
 

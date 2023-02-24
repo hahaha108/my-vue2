@@ -55,7 +55,7 @@ let has = {}
 let panding = false
 function flushWatcher() {
     // console.log(queue)
-    queue.forEach(watcher => { watcher.run() })
+    queue.forEach(watcher => { watcher.run(),watcher.cb() })
     queue = []
     has = {}
     panding = false
